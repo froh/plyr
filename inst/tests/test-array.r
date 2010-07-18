@@ -22,8 +22,8 @@ test_that("results must have positive dimensions", {
 
 
 test_that("simple operations equivalent to vectorised form", {
-  expect_that(laply(1:10, mean), is_equivalent_to(1:10))
-  expect_that(laply(1:10, sqrt), is_equivalent_to(sqrt(1:10)))
+  expect_that(laply(1:10, mean), equals(1:10))
+  expect_that(laply(1:10, sqrt), equals(sqrt(1:10)))
 })
 
 test_that("array binding is correct", {
@@ -32,13 +32,13 @@ test_that("array binding is correct", {
   m2d <- lapply(1:10, f)
   m3d <- abind(m2d, along = 0)
   
-  expect_that(laply(1:10, f), is_equivalent_to(m3d))
+  expect_that(laply(1:10, f), equals(m3d))
 
   f <- function(x) array(x, c(2, 2, 2))
   m3d <- lapply(1:10, f)
   m4d <- abind(m3d, along = 0)
   
-  expect_that(laply(1:10, f), is_equivalent_to(m4d))
+  expect_that(laply(1:10, f), equals(m4d))
 })
 
 # Basis of test contributed by anonymous reviewer.
@@ -56,7 +56,7 @@ test_that("idempotent function equivalent to permutation",  {
     expect_that(dim(aaplys[[i]]), equals(dim(aperms[[i]])), perm)
     expect_that(unname(dimnames(aaplys[[i]])), equals(dimnames(aperms[[i]])),
       perm)
-    expect_that(aaplys[[i]], is_equivalent_to(aperms[[i]]), perm)
+    expect_that(aaplys[[i]], equals(aperms[[i]]), perm)
   }
 
 })
@@ -76,10 +76,10 @@ test_that("single column data frames work when treated as an array", {
 
 test_that("aaply equivalent to apply with correct permutation", {
   a <- matrix(seq_len(400), ncol = 20)
-  expect_that(rowMeans(a), equals(aaply(a, 1, mean), check.attr = FALSE))
-  expect_that(colMeans(a), equals(aaply(a, 2, mean), check.attr = FALSE))
+  expect_that(rowMeans(a), equals(aaply(a, 1, mean)))
+  expect_that(colMeans(a), equals(aaply(a, 2, mean)))
   
   b <- structure(a, dimnames = plyr:::amv_dimnames(a))
-  expect_that(rowMeans(a), equals(aaply(a, 1, mean), check.attr = FALSE))
-  expect_that(colMeans(a), equals(aaply(a, 2, mean), check.attr = FALSE))  
+  expect_that(rowMeans(a), equals(aaply(a, 1, mean)))
+  expect_that(colMeans(a), equals(aaply(a, 2, mean)))  
 })
